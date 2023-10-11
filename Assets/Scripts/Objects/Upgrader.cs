@@ -29,7 +29,7 @@ public class Upgrader : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
 
-            if (resourceManager.CurrentResources() > - cost)
+            if (resourceManager.CurrentResources() >= cost)
             {
                 resourceManager.RemoveResources(cost);
                 onActivated.Invoke();
