@@ -14,12 +14,13 @@ public class PlayerMovement : MonoBehaviour
     //Var Priv
     private Vector3 movementVector, verticalForce;
     private bool isGrounded;
-    private float speed;
+    private float speed, currentSpeed;
     private CharacterController characterController;
 
     void Start()
     {
         speed = 0f;
+        currentSpeed = 0f;
         movementVector = Vector3.zero;
         verticalForce = Vector3.zero;
         characterController = GetComponent<CharacterController>();
@@ -58,8 +59,11 @@ public class PlayerMovement : MonoBehaviour
         //Move to camera direction
         movementVector = cameraAim.TransformDirection(movementVector);
 
+        //Smooth Velocity
+        currentSpeed = Mathf.Lerp(currentSpeed, movementVector.magnitude * speed, 10f * Time.deltaTime);
+
         //Move
-        characterController.Move(movementVector * speed * Time.deltaTime);
+        characterController.Move(movementVector * currentSpeed * Time.deltaTime);
     }
 
     //Fn Run
@@ -120,6 +124,12 @@ public class PlayerMovement : MonoBehaviour
     void CheckGround()
     {
         isGrounded = groundDetector.GetIsGrounded();
+    }
+
+    // Fn return currentSpeed
+    public float GetCurrentSpeed()
+    {
+        return currentSpeed;
     }
 
 }
